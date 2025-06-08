@@ -9,7 +9,7 @@ const connectToDatabase = require("./database/db");
 app.use(cors());
 
 if (!process.env.MONGODB_URI) {
-    console.error("MONGODB_URI is not defined in the environment variables.");
+    console.error("MONGODB_URI is not defined");
     process.exit(1);
 }
 

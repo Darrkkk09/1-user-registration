@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const userController = require('../contollers/usercontroller');
+const authMW = require('../middlewares/authMWare');
+const Blacklist = require('../models/blist');
+
 
 router.post('/register', [
     body('firstName').isLength({ min: 1 }).withMessage('First name is required'),
@@ -17,5 +20,20 @@ router.post('/register', [
 
     await userController.registerUser(req, res, next);
 });
+router.post('/login', [
+    body('email').isEmail().withMessage('Invalid email '),
+    body('password').isLength({min : 4}).withMessage('password must be at least 4 characters long')
+],
+    userController.loginUser
+
+);
+
+router.get('/profile',authMW.authOrNo, async (req,res)=>{
+    userController.getprofile;
+})
+router.get('/logout',authMW.authOrNo, (req, res,next) => {
+    userController.logoutUser(req, res,next);
+});
+
 
 module.exports = router;
